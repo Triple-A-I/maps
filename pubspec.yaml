@@ -12,7 +12,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter:
     sdk: flutter
-  geolocator: ^7.0.0
+  geolocator: ^9.0.2
 
 dev_dependencies:
   flutter_lints: ^2.0.0

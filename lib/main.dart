@@ -45,9 +45,17 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<Position> getLatLong() async {
-    return await Geolocator.getCurrentPosition(
-            timeLimit: null, desiredAccuracy: LocationAccuracy.medium)
-        .then((value) => value);
+    print('======');
+    print(await Geolocator.checkPermission());
+    print('======');
+
+    return Geolocator.getCurrentPosition(
+            forceAndroidLocationManager: true,
+            timeLimit: null,
+            desiredAccuracy: LocationAccuracy.medium)
+        .then((value) {
+      return value;
+    });
   }
 
   @override
@@ -59,21 +67,32 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
-        body: Center(
-            child: Column(
-          children: [
-            ElevatedButton(
-                onPressed: () async {
-                  print("AAAAAALLLLLLLLBRRRRa");
-                  currentPosition = await getLatLong();
-                  // setState(() {});
+      appBar: AppBar(),
+      body: Center(
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          TextButton(
+              onPressed: () {
+                double distanceBetween = Geolocator.distanceBetween(
+                        15.500654, 33.000000, 24.711666, 46.724167) /
+                    1000;
+                print("Distance in Km is $distanceBetween");
+              },
+              child: Text('Distance')),
+        ],
+      )),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          currentPosition = await getLatLong();
 
-                  print("latitude ${currentPosition.latitude}");
-                  print("long ${currentPosition.longitude}");
-                },
-                child: const Icon(Icons.place))
-          ],
-        )));
+          print("latitude ${currentPosition.latitude}");
+          print("longitude ${currentPosition.longitude}");
+        },
+        child: Icon(
+          Icons.location_on_outlined,
+        ),
+      ),
+    );
   }
 }
